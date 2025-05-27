@@ -70,6 +70,8 @@ object popular {
 
 class Dependencia {
     const flota = []
+    const property pedidosDependencia = #{}
+
     var property empleados = 0
     method agregarAFlota(rodado) {
         flota.add(rodado)
@@ -89,6 +91,24 @@ class Dependencia {
     method capacidadFaltante() = (empleados - self.capacidadDeLaFlota()).max(0)
     method capacidadDeLaFlota() = flota.sum({r=>r.capacidad()})
     method esGrande() = empleados >= 40 && self.tieneAlMenosRodados(5)
+
+    method agregarPedido(unPedido) =
+        pedidosDependencia.add(unPedido)
+    method eliminarPedido(unPedido) =
+        pedidosDependencia.remove(unPedido)
+    method pasajerosPedidos() =
+        pedidosDependencia.sum({p => p.cantPasajeros()})
+    method flotaNoSatisface(p) =
+        flota.any({r => !p.satisfacePedido(r)})
+    
+    method pedidosInsatisfechos() =
+        pedidosDependencia.filter({p => self.flotaNoSatisface(p)})
+    
+    method colorIncompatiblePedido(unColor) =
+        pedidosDependencia.all({p => p.coloresInvalidos().contains(unColor)})
+    
+    method relajarPedidos() =
+        pedidosDependencia.forEach(pedidosDependencia.relajar())
 }
 
 object coloresValidos{
@@ -96,7 +116,7 @@ object coloresValidos{
 }
 
 class Pedidos{
-    const coloresInvalidos = #{}
+    const property coloresInvalidos = #{}
     var property distancia
     var property tiempoMaximo    
     var property cantPasajeros
@@ -117,5 +137,5 @@ class Pedidos{
         return !coloresInvalidos.contains(unRodado.color())
     }
     method acelerar() =  tiempoMaximo - 1
-    method relajar() = tiempoMaximo + 1
+    method relajar(){ tiempoMaximo + 1 }
 }
