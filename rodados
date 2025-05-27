@@ -118,7 +118,7 @@ object coloresValidos{
 class Pedidos{
     const property coloresInvalidos = #{}
     var property distancia
-    var property tiempoMaximo    
+    var tiempoMaximo    
     var property cantPasajeros
     method colorInvalido(unColor) =
         coloresInvalidos.add(unColor)
@@ -136,6 +136,6 @@ class Pedidos{
     method colorCompatible(unRodado){
         return !coloresInvalidos.contains(unRodado.color())
     }
-    method acelerar() =  tiempoMaximo - 1
-    method relajar(){ tiempoMaximo + 1 }
+    method acelerar() {tiempoMaximo = 1.max(tiempoMaximo - 1)}
+    method relajar(){ timepoMaximo = tiempoMaximo + 1 }
 }
